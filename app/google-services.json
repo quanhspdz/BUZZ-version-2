@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "744855518985",
+    "project_id": "buzz---chat-app",
+    "storage_bucket": "buzz---chat-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:744855518985:android:217c048d84c83f8a67ddd8",
+        "android_client_info": {
+          "package_name": "com.example.buzzversion2"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "744855518985-hog0b4n8doicr91ic81p4vso6t7603kh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD-h1t-sTvWo8mU8kXPuHGlfWu0SCSpzA0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "744855518985-hog0b4n8doicr91ic81p4vso6t7603kh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

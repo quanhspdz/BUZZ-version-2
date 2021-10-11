@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">BUZZ version 2</string>
+    <string name="welcome_back_to_buzz">Welcome back to BUZZ!</string>
+    <string name="login_to_continue">Login to continue</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="sign_in">SIGN IN</string>
+    <string name="or_create_new_account_now">Or create new account now!</string>
+    <string name="create_new_buzz_account">Create new BUZZ account!</string>
+    <string name="add_image">add image</string>
+    <string name="name">Name</string>
+    <string name="confirm_password">Confirm password</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="already_have_account_sign_in_now">Already have account? Sign in now!</string>
+    <string name="select_user">Select user</string>
+    <string name="type_a_message">Type a message...</string>
+</resources>
