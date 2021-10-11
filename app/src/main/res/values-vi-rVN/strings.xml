@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="login_to_continue">Đăng nhập để tiếp tục</string>
+    <string name="sign_in">Đăng nhập</string>
+    <string name="or_create_new_account_now">Hoặc tạo tài khoản mới ngay tại đây!</string>
+    <string name="create_new_buzz_account">Tạo tài khoản BUZZ mới!</string>
+    <string name="add_image">thêm ảnh</string>
+    <string name="name">Tên của bạn</string>
+    <string name="confirm_password">Xác nhận mật khẩu</string>
+    <string name="sign_up">Đăng kí</string>
+    <string name="email" translatable="false">Email của bạn</string>
+    <string name="password">Mật khẩu</string>
+    <string name="already_have_account_sign_in_now">Đã có sẵn tài khoản? Đăng nhập ngay tại đây!</string>
+    <string name="type_a_message">Nhắn gì đó đi nào...</string>
+    <string name="welcome_back_to_buzz">Chào mừng trở lại với BUZZ!</string>
+    <string name="select_user">Bạn muốn nhắn tới ai?</string>
+    <string name="signing_out">Đang đăng xuất...</string>
+    <string name="unable_to_update_token">Không thể cập nhật token!</string>
+    <string name="unable_to_sign_in">Không thể đăng nhập!</string>
+    <string name="enter_email">Hãy nhập địa chỉ email!</string>
+    <string name="enter_valid_email">Hãy nhập địa chỉ email hợp lệ!</string>
+    <string name="enter_password">Hãy nhập mật khẩu!</string>
+    <string name="enter_confirm_password">Hãy xác nhận mật khẩu của bạn!</string>
+    <string name="enter_name">Hãy nhập tên của bạn!</string>
+    <string name="add_profile_image">Hãy thêm ảnh đại diện!</string>
+    <string name="confirm_password_incorrect">Mật khẩu xác nhận không khớp!</string>
+</resources>

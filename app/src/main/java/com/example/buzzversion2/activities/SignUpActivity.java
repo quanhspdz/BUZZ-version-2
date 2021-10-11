@@ -15,6 +15,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.buzzversion2.R;
 import com.example.buzzversion2.databinding.ActivitySignUpBinding;
 import com.example.buzzversion2.utilities.Constants;
 import com.example.buzzversion2.utilities.PreferenceManager;
@@ -130,25 +131,25 @@ public class SignUpActivity extends AppCompatActivity {
 
     private Boolean isValidSignUpDetails() {
         if (encodedImage == null) {
-            showToast("Select a profile image!");
+            showToast(getStringFromResource(R.string.add_profile_image));
             return false;
         } else if (binding.inputName.getText().toString().trim().isEmpty()) {
-            showToast("Enter name!");
+            showToast(getStringFromResource(R.string.enter_name));
             return false;
         } else if (binding.inputEmail.getText().toString().trim().isEmpty()) {
-            showToast("Enter email!");
+            showToast(getStringFromResource(R.string.enter_email));
             return false;
         } else if (!Patterns.EMAIL_ADDRESS.matcher(binding.inputEmail.getText().toString()).matches()) {
-            showToast("Enter a valid email!");
+            showToast(getStringFromResource(R.string.enter_valid_email));
             return false;
         } else if (binding.inputPassword.getText().toString().trim().isEmpty()) {
-            showToast("Enter password!");
+            showToast(getStringFromResource(R.string.enter_password));
             return false;
         } else if (binding.inputConfirmPassword.getText().toString().trim().isEmpty()) {
-            showToast("Confirm your password!");
+            showToast(getStringFromResource(R.string.enter_confirm_password));
             return false;
         } else if (!binding.inputPassword.getText().toString().equals(binding.inputConfirmPassword.getText().toString())) {
-            showToast("Confirm password is incorrect!");
+            showToast(getStringFromResource(R.string.confirm_password_incorrect));
             return false;
         } else {
             return true;
@@ -165,4 +166,7 @@ public class SignUpActivity extends AppCompatActivity {
         }
     }
 
+    private String getStringFromResource(int resource) {
+        return getApplicationContext().getResources().getString(resource);
+    }
 }

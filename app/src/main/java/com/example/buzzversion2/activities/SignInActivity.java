@@ -8,6 +8,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.buzzversion2.R;
 import com.example.buzzversion2.databinding.ActivitySignInBinding;
 import com.example.buzzversion2.utilities.Constants;
 import com.example.buzzversion2.utilities.PreferenceManager;
@@ -76,7 +77,7 @@ public class SignInActivity extends AppCompatActivity {
                             finish();
                         } else {
                             loading(false);
-                            showToast("Unable to Sign in!");
+                            showToast(getStringFromResource(R.string.unable_to_sign_in));
                         }
                     });
         }
@@ -88,13 +89,13 @@ public class SignInActivity extends AppCompatActivity {
 
     private Boolean isValidSignInDetails() {
         if (binding.inputEmail.getText().toString().isEmpty()) {
-            showToast("Enter email!");
+            showToast(getStringFromResource(R.string.enter_email));
             return false;
         } else if (!Patterns.EMAIL_ADDRESS.matcher(binding.inputEmail.getText().toString()).matches()) {
-            showToast("Enter valid email!");
+            showToast(getStringFromResource(R.string.enter_valid_email));
             return false;
         } else if (binding.inputPassword.getText().toString().isEmpty()) {
-            showToast("Enter password");
+            showToast(getStringFromResource(R.string.enter_password));
             return false;
         } else {
             return true;
@@ -109,5 +110,9 @@ public class SignInActivity extends AppCompatActivity {
             binding.buttonSignIn.setVisibility(View.VISIBLE);
             binding.progressBar.setVisibility(View.GONE);
         }
+    }
+
+    private String getStringFromResource(int resource) {
+        return getApplicationContext().getResources().getString(resource);
     }
 }

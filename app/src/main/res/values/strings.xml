@@ -1,6 +1,5 @@
 <resources>
-    <string name="app_name">BUZZ version 2</string>
-    <string name="welcome_back_to_buzz">Welcome back to BUZZ!</string>
+    <string name="app_name" translatable="false">BUZZ!</string>
     <string name="login_to_continue">Login to continue</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
@@ -13,5 +12,16 @@
     <string name="sign_up">Sign Up</string>
     <string name="already_have_account_sign_in_now">Already have account? Sign in now!</string>
     <string name="select_user">Select user</string>
-    <string name="type_a_message">Type a message...</string>
+    <string name="type_a_message">Type a message…</string>
+    <string name="welcome_back_to_buzz">Welcome back to BUZZ!</string>
+    <string name="signing_out">Signing out…</string>
+    <string name="unable_to_update_token">Unable to update token!</string>
+    <string name="unable_to_sign_in">Unable to Sign in</string>
+    <string name="enter_email">Enter email!</string>
+    <string name="enter_valid_email">Enter valid email!</string>
+    <string name="enter_password">Enter password!</string>
+    <string name="enter_confirm_password">Enter confirm password</string>
+    <string name="enter_name">Enter name!</string>
+    <string name="add_profile_image">Add profile image!</string>
+    <string name="confirm_password_incorrect">Confirm password is incorrect!</string>
 </resources>
