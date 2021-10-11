@@ -13,10 +13,11 @@
         android:id="@+id/viewBackground"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginBottom="@dimen/_16sdp"
+        android:layout_marginTop="0dp"
+        android:layout_marginBottom="@dimen/_8sdp"
         android:background="@drawable/background_content_top"
         app:layout_constraintBottom_toTopOf="@id/layoutSend"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@id/viewSupporter">
 
     </View>
 
@@ -33,7 +34,7 @@
         android:layout_width="@dimen/_30sdp"
         android:layout_height="@dimen/_30sdp"
         android:layout_marginStart="@dimen/_16sdp"
-        android:layout_marginTop="@dimen/_12sdp"
+        android:layout_marginTop="@dimen/_4sdp"
         android:padding="@dimen/_5sdp"
         app:tint="@color/white"
         android:src="@drawable/ic_back"
@@ -44,7 +45,7 @@
         android:id="@+id/imageInfo"
         android:layout_width="@dimen/_30sdp"
         android:layout_height="@dimen/_30sdp"
-        android:layout_marginTop="@dimen/_12sdp"
+        android:layout_marginTop="@dimen/_4sdp"
         android:layout_marginEnd="@dimen/_16sdp"
         android:padding="@dimen/_4sdp"
         android:src="@drawable/ic_info"
@@ -79,7 +80,7 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@color/primary"
-        android:layout_marginTop="@dimen/_12sdp"
+        android:layout_marginTop="@dimen/_8sdp"
         app:layout_constraintTop_toBottomOf="@id/imageBack"/>
 
     <androidx.recyclerview.widget.RecyclerView
@@ -110,11 +111,12 @@
         android:id="@+id/layoutSend"
         android:layout_width="@dimen/_40sdp"
         android:layout_height="@dimen/_40sdp"
-        android:layout_marginEnd="@dimen/_16sdp"
-        android:layout_marginBottom="@dimen/_12sdp"
+        android:layout_marginEnd="@dimen/_8sdp"
+        android:layout_marginBottom="@dimen/_8sdp"
         android:background="@drawable/background_chat_input"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/inputMessage">
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/buttonSend"
@@ -123,7 +125,7 @@
             android:layout_marginStart="@dimen/_4sdp"
             android:padding="@dimen/_8sdp"
             android:src="@drawable/ic_send"
-            app:tint="@color/white"/>
+            app:tint="@color/white" />
 
     </FrameLayout>
 
@@ -131,9 +133,9 @@
         android:id="@+id/inputMessage"
         android:layout_width="0dp"
         android:layout_height="@dimen/_40sdp"
-        android:layout_marginStart="@dimen/_16sdp"
+        android:layout_marginStart="@dimen/_8sdp"
         android:layout_marginEnd="@dimen/_8sdp"
-        android:layout_marginBottom="@dimen/_12sdp"
+        android:layout_marginBottom="@dimen/_8sdp"
         android:background="@drawable/background_chat_input"
         android:hint="@string/type_a_message"
         android:imeOptions="actionDone"
@@ -142,7 +144,7 @@
         android:paddingStart="@dimen/_16sdp"
         android:paddingEnd="@dimen/_16sdp"
         android:textColor="@color/white"
-        android:textColorHint="@color/secondary_text"
+        android:textColorHint="@color/input_message_text"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/layoutSend"
         app:layout_constraintStart_toStartOf="parent"/>

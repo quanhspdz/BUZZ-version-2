@@ -4,7 +4,14 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.media.AudioAttributes;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Build;
+import android.renderscript.ScriptGroup;
+import android.util.Base64;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
@@ -17,6 +24,7 @@ import com.example.buzzversion2.utilities.Constants;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
+import java.io.InputStream;
 import java.util.Random;
 
 
@@ -57,6 +65,11 @@ public class MessagingService extends FirebaseMessagingService {
         builder.setContentIntent(pendingIntent);
         builder.setAutoCancel(true);
 
+        Uri sound = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.bark);
+        long[] vibrate = { 0, 100, 200, 300 };
+        builder.setVibrate(vibrate);
+        builder.setSound(sound);
+
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.O) {
             CharSequence channelName = "Chat Message";
             String channelDescription = "This notification channel is used for chat message notifications";
@@ -69,5 +82,14 @@ public class MessagingService extends FirebaseMessagingService {
 
         NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(this);
         notificationManagerCompat.notify(notificationId, builder.build());
+    }
+
+    private Bitmap getBitmapFromString(String encodedImage) {
+        if (encodedImage != null) {
+            byte[] bytes = Base64.decode(encodedImage, Base64.DEFAULT);
+            return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+        } else {
+            return null;
+        }
     }
 }

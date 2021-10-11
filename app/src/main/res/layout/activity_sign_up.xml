@@ -142,7 +142,7 @@
             android:id="@+id/textSignIn"
             android:layout_marginTop="@dimen/_10sdp"
             android:text="@string/already_have_account_sign_in_now"
-            android:textColor="@color/primary"
+            android:textColor="@color/primary_text"
             android:textSize="@dimen/_13ssp"
             android:textStyle="bold"/>
 

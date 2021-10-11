@@ -97,7 +97,7 @@
             android:id="@+id/textCreateNewAccount"
             android:layout_marginTop="@dimen/_30sdp"
             android:text="@string/or_create_new_account_now"
-            android:textColor="@color/primary"
+            android:textColor="@color/primary_text"
             android:textSize="@dimen/_13ssp"
             android:textStyle="bold"/>
 

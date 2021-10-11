@@ -209,17 +209,17 @@ public class ChatActivity extends BaseActivity {
                             }
                         }
                     } catch (JSONException e) {
-                        e.printStackTrace();
+                        //e.printStackTrace();
                     }
                 }
                 else {
-                    showToast("Error: " + response.code());
+                    //showToast("Error: " + response.code());
                 }
             }
 
             @Override
             public void onFailure(@Nonnull Call<String> call, @Nonnull Throwable t) {
-                showToast(t.getMessage());
+                //showToast(t.getMessage());
             }
         });
     }
