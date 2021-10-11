@@ -1,15 +1,12 @@
 package com.example.buzzversion2.activities;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.JetPlayer;
-import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.Base64;
 import android.view.View;
 
+import com.example.buzzversion2.R;
 import com.example.buzzversion2.adapters.ChatAdapter;
 import com.example.buzzversion2.databinding.ActivityChatBinding;
 import com.example.buzzversion2.models.ChatMessage;
@@ -26,14 +23,14 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
-public class ChatActivity extends AppCompatActivity {
+public class ChatActivity extends BaseActivity {
 
     private ActivityChatBinding binding;
     private User receivedUser;
@@ -42,6 +39,7 @@ public class ChatActivity extends AppCompatActivity {
     private PreferenceManager preferenceManager;
     private FirebaseFirestore database;
     private String conversationId = null;
+    private Boolean isReceiverAvailable = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +50,33 @@ public class ChatActivity extends AppCompatActivity {
         setListener();
         init();
         listenerMessages();
+        listenAvailabilityOfReceiver();
+    }
+
+    private void listenAvailabilityOfReceiver() {
+        database.collection(Constants.KEY_COLLECTION_USER)
+                .document(receivedUser.id)
+                .addSnapshotListener(ChatActivity.this, ((value, error) -> {
+                    if (error != null) {
+                        return;
+                    }
+                    if (value != null) {
+                        if (value.getLong(Constants.KEY_AVAILABILITY) != null) {
+                            int availability = Objects.requireNonNull(
+                                    value.getLong(Constants.KEY_AVAILABILITY)
+                            ).intValue();
+                            isReceiverAvailable = availability == 1;
+                        }
+                    }
+                    if (isReceiverAvailable) {
+                        binding.textName.setCompoundDrawablesWithIntrinsicBounds(
+                                R.drawable.ic_baseline_brightness_1_24,
+                                0 , 0 , 0);
+                    } else {
+                        binding.textName.setCompoundDrawablesWithIntrinsicBounds(
+                                0, 0 , 0 , 0);
+                    }
+                }));
     }
 
     private void listenerMessages() {
@@ -207,5 +232,11 @@ public class ChatActivity extends AppCompatActivity {
                 Constants.KEY_LAST_MESSAGE, message,
                 Constants.KEY_TIMESTAMP, new Date()
         );
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        listenAvailabilityOfReceiver();
     }
 }
