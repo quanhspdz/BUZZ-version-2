@@ -1,7 +1,5 @@
 package com.example.buzzversion2.activities;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -18,7 +16,6 @@ import com.example.buzzversion2.models.ChatMessage;
 import com.example.buzzversion2.models.User;
 import com.example.buzzversion2.utilities.Constants;
 import com.example.buzzversion2.utilities.PreferenceManager;
-import com.google.common.base.MoreObjects;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.EventListener;
@@ -26,7 +23,6 @@ import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.messaging.FirebaseMessaging;
-import com.google.firebase.messaging.FirebaseMessagingService;
 
 import java.util.ArrayList;
 import java.util.Collections;

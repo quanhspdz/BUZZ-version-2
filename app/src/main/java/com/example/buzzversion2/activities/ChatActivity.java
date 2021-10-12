@@ -17,17 +17,21 @@ import com.example.buzzversion2.network.ApiService;
 import com.example.buzzversion2.utilities.Constants;
 import com.example.buzzversion2.utilities.PreferenceManager;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firestore.v1.DocumentTransform;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -142,11 +146,13 @@ public class ChatActivity extends BaseActivity {
     };
 
     private void sendMessage() {
+        Timestamp timestamp = Timestamp.now();
+
         HashMap<String, Object> message = new HashMap<>();
         message.put(Constants.KEY_SENDER_ID, preferenceManager.getString(Constants.KEY_USER_ID));
         message.put(Constants.KEY_RECEIVER_ID, receivedUser.id);
         message.put(Constants.KEY_MESSAGE, binding.inputMessage.getText().toString());
-        message.put(Constants.KEY_TIMESTAMP, new Date());
+        message.put(Constants.KEY_TIMESTAMP, timestamp.toDate());
         database.collection(Constants.KEY_COLLECTION_CHAT).add(message);
         if (conversationId != null) {
             updateConversation(binding.inputMessage.getText().toString());
@@ -159,7 +165,8 @@ public class ChatActivity extends BaseActivity {
             conversation.put(Constants.KEY_RECEIVER_NAME, receivedUser.name);
             conversation.put(Constants.KEY_RECEIVER_IMAGE, receivedUser.image);
             conversation.put(Constants.KEY_LAST_MESSAGE, binding.inputMessage.getText().toString());
-            conversation.put((Constants.KEY_TIMESTAMP), new Date());
+            conversation.put((Constants.KEY_TIMESTAMP), timestamp.toDate());
+
             addConversation(conversation);
         }
         if (!isReceiverAvailable) {
@@ -179,7 +186,7 @@ public class ChatActivity extends BaseActivity {
 
                 sendNotification(body.toString());
             } catch (Exception e) {
-                showToast(e.getMessage());
+                //showToast(e.getMessage());
             }
         }
 
@@ -204,7 +211,7 @@ public class ChatActivity extends BaseActivity {
                             JSONArray results = responseJson.getJSONArray("results");
                             if (responseJson.getInt("failure") == 1) {
                                 JSONObject error = (JSONObject) results.get(0);
-                                showToast(error.getString("error"));
+                                //showToast(error.getString("error"));
                                 return;
                             }
                         }
@@ -308,11 +315,12 @@ public class ChatActivity extends BaseActivity {
     }
 
     private void updateConversation(String message) {
+        Timestamp timestamp = Timestamp.now();
         DocumentReference documentReference =
                 database.collection(Constants.KEY_COLLECTION_CONVERSATIONS).document(conversationId);
         documentReference.update(
                 Constants.KEY_LAST_MESSAGE, message,
-                Constants.KEY_TIMESTAMP, new Date()
+                Constants.KEY_TIMESTAMP, timestamp.toDate()
         );
     }
 
