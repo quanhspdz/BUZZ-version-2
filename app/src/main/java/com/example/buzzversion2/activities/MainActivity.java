@@ -4,13 +4,16 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
 import com.example.buzzversion2.R;
 import com.example.buzzversion2.adapters.RecentConversationsAdapter;
 import com.example.buzzversion2.databinding.ActivityMainBinding;
+import com.example.buzzversion2.firebase.ServerTimestamp;
 import com.example.buzzversion2.listeners.ConversationListener;
 import com.example.buzzversion2.models.ChatMessage;
 import com.example.buzzversion2.models.User;
@@ -26,6 +29,7 @@ import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
