@@ -24,4 +24,5 @@
     <string name="enter_name">Hãy nhập tên của bạn!</string>
     <string name="add_profile_image">Hãy thêm ảnh đại diện!</string>
     <string name="confirm_password_incorrect">Mật khẩu xác nhận không khớp!</string>
+    <string name="email_is_taken">Email này đã được đăng ký bởi một tài khoản khác!</string>
 </resources>

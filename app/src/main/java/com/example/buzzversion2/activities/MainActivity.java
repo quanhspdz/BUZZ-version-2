@@ -76,6 +76,14 @@ public class MainActivity extends BaseActivity implements ConversationListener {
                 startActivity(intent);
             }
         });
+        binding.imageProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), UserInfoActivity.class);
+                intent.putExtra(Constants.KEY_USER_ID, preferenceManager.getString(Constants.KEY_USER_ID));
+                startActivity(intent);
+            }
+        });
     }
 
     private void loadUserDetails() {

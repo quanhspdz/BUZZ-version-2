@@ -1,5 +1,6 @@
 package com.example.buzzversion2.activities;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -294,6 +295,14 @@ public class ChatActivity extends BaseActivity {
                 if (!binding.inputMessage.getText().toString().trim().isEmpty()) {
                     sendMessage();
                 }
+            }
+        });
+        binding.imageInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), UserInfoActivity.class);
+                intent.putExtra(Constants.KEY_USER_ID, receivedUser.id);
+                startActivity(intent);
             }
         });
     }

@@ -25,6 +25,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.io.ByteArrayOutputStream;
@@ -37,6 +38,8 @@ public class SignUpActivity extends AppCompatActivity {
     private ActivitySignUpBinding binding;
     String encodedImage;
     private PreferenceManager preferenceManager;
+    FirebaseFirestore database;
+    Boolean isExisted = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +47,7 @@ public class SignUpActivity extends AppCompatActivity {
         binding = ActivitySignUpBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         preferenceManager = new PreferenceManager(getApplicationContext());
+        database = FirebaseFirestore.getInstance();
         setListener();
 
     }
@@ -60,7 +64,7 @@ public class SignUpActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (isValidSignUpDetails()) {
-                    signUp();
+                    checkEmailExist();
                 }
             }
         });
@@ -77,6 +81,35 @@ public class SignUpActivity extends AppCompatActivity {
 
     private void showToast(String message) {
         Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+    }
+
+    private void checkEmailExist() {
+        isExisted = false;
+        loading(true);
+        String email = binding.inputEmail.getText().toString();
+        if (!email.equals(null)) {
+            database.collection(Constants.KEY_COLLECTION_USER)
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if (task.isSuccessful() && task.getResult() != null) {
+                                for (QueryDocumentSnapshot queryDocumentSnapshot : task.getResult()) {
+                                    if (email.equals(queryDocumentSnapshot.getString(Constants.KEY_EMAIL))) {
+                                        loading(false);
+                                        isExisted = true;
+                                        break;
+                                    }
+                                }
+                                if (isExisted) {
+                                    showToast(getStringFromResource(R.string.email_is_taken));
+                                } else {
+                                    signUp();
+                                }
+                            }
+                        }
+                    });
+        }
     }
 
     private void signUp() {

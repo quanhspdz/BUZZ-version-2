@@ -24,6 +24,7 @@
     <string name="enter_name">Enter name!</string>
     <string name="add_profile_image">Add profile image!</string>
     <string name="confirm_password_incorrect">Confirm password is incorrect!</string>
-    <string name="online">online</string>
-    <string name="Online">Online</string>
+    <string name="online" translatable="false">online</string>
+    <string name="Online" translatable="false">Online</string>
+    <string name="email_is_taken">This email is taken by another account! Please use another email!</string>
 </resources>
