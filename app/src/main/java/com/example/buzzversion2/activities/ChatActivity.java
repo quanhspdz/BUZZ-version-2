@@ -3,9 +3,13 @@ package com.example.buzzversion2.activities;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.buzzversion2.R;
 import com.example.buzzversion2.adapters.ChatAdapter;
@@ -17,14 +21,20 @@ import com.example.buzzversion2.network.ApiService;
 import com.example.buzzversion2.utilities.Constants;
 import com.example.buzzversion2.utilities.PreferenceManager;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.things.device.TimeManager;
 import com.google.firebase.Timestamp;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.MetadataChanges;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.ServerTimestamp;
 import com.google.firestore.v1.DocumentTransform;
 
 import org.json.JSONArray;
@@ -68,8 +78,8 @@ public class ChatActivity extends BaseActivity {
         init();
         listenerMessages();
         listenAvailabilityOfReceiver();
-    }
 
+    }
     private void listenAvailabilityOfReceiver() {
         database.collection(Constants.KEY_COLLECTION_USER)
                 .document(receivedUser.id)
@@ -113,7 +123,7 @@ public class ChatActivity extends BaseActivity {
                 .addSnapshotListener(eventListener);
     }
 
-    private EventListener<QuerySnapshot> eventListener = (value, error) -> {
+    private final EventListener<QuerySnapshot> eventListener = (value, error) -> {
         if (error != null) {
             return;
         }
@@ -125,9 +135,26 @@ public class ChatActivity extends BaseActivity {
                     chatMessage.senderId = documentChange.getDocument().getString(Constants.KEY_SENDER_ID);
                     chatMessage.receiverId = documentChange.getDocument().getString(Constants.KEY_RECEIVER_ID);
                     chatMessage.message = documentChange.getDocument().getString(Constants.KEY_MESSAGE);
-                    chatMessage.dateTime = getReadableTime(documentChange.getDocument().getDate(Constants.KEY_TIMESTAMP));
-                    chatMessage.dateObject = documentChange.getDocument().getDate(Constants.KEY_TIMESTAMP);
+                    Date date = new Date();
+                    chatMessage.isServerTime = false;
+                    if (documentChange.getDocument().getDate(Constants.KEY_TIMESTAMP) != null) {
+                        date = documentChange.getDocument().getDate(Constants.KEY_TIMESTAMP);
+                        chatMessage.isServerTime = true;
+                    }
+                    chatMessage.dateTime = getReadableTime(date);
+                    chatMessage.dateObject = date;
                     chatMessages.add(chatMessage);
+                } else if (documentChange.getType() == DocumentChange.Type.MODIFIED) {
+                    for (int i = 0; i < chatMessages.size(); i++) {
+                        if (!chatMessages.get(i).isServerTime
+                                && documentChange.getDocument().getDate(Constants.KEY_TIMESTAMP) != null) {
+                            chatMessages.get(i).dateObject = documentChange.getDocument().getDate(Constants.KEY_TIMESTAMP);
+                            chatMessages.get(i).dateTime = getReadableTime(chatMessages.get(i).dateObject);
+                            chatMessages.get(i).isServerTime = true;
+                            chatAdapter.notifyDataSetChanged();
+                            break;
+                        }
+                    }
                 }
             }
             Collections.sort(chatMessages, (obj1, obj2) -> obj1.dateObject.compareTo(obj2.dateObject));
@@ -146,13 +173,11 @@ public class ChatActivity extends BaseActivity {
     };
 
     private void sendMessage() {
-        Timestamp timestamp = Timestamp.now();
-
         HashMap<String, Object> message = new HashMap<>();
         message.put(Constants.KEY_SENDER_ID, preferenceManager.getString(Constants.KEY_USER_ID));
         message.put(Constants.KEY_RECEIVER_ID, receivedUser.id);
         message.put(Constants.KEY_MESSAGE, binding.inputMessage.getText().toString());
-        message.put(Constants.KEY_TIMESTAMP, timestamp.toDate());
+        message.put(Constants.KEY_TIMESTAMP, FieldValue.serverTimestamp());
         database.collection(Constants.KEY_COLLECTION_CHAT).add(message);
         if (conversationId != null) {
             updateConversation(binding.inputMessage.getText().toString());
@@ -165,7 +190,7 @@ public class ChatActivity extends BaseActivity {
             conversation.put(Constants.KEY_RECEIVER_NAME, receivedUser.name);
             conversation.put(Constants.KEY_RECEIVER_IMAGE, receivedUser.image);
             conversation.put(Constants.KEY_LAST_MESSAGE, binding.inputMessage.getText().toString());
-            conversation.put((Constants.KEY_TIMESTAMP), timestamp.toDate());
+            conversation.put((Constants.KEY_TIMESTAMP), FieldValue.serverTimestamp());
 
             addConversation(conversation);
         }
@@ -189,7 +214,6 @@ public class ChatActivity extends BaseActivity {
                 //showToast(e.getMessage());
             }
         }
-
         binding.inputMessage.setText(null);
     }
 
@@ -275,7 +299,12 @@ public class ChatActivity extends BaseActivity {
     }
 
     private String getReadableTime(Date date) {
-        return new SimpleDateFormat("MMMM dd, yyyy - hh:mm a", Locale.getDefault()).format(date);
+        if (date != null) {
+            return new SimpleDateFormat("MMMM dd, yyyy - hh:mm a", Locale.getDefault()).format(date);
+        }
+        else {
+            return new SimpleDateFormat("MMMM dd, yyyy - hh:mm a", Locale.getDefault()).format(new Date());
+        }
     }
 
     private void checkConversation() {
@@ -320,7 +349,7 @@ public class ChatActivity extends BaseActivity {
                 database.collection(Constants.KEY_COLLECTION_CONVERSATIONS).document(conversationId);
         documentReference.update(
                 Constants.KEY_LAST_MESSAGE, message,
-                Constants.KEY_TIMESTAMP, timestamp.toDate()
+                Constants.KEY_TIMESTAMP, FieldValue.serverTimestamp()
         );
     }
 

@@ -13,7 +13,6 @@ import android.widget.Toast;
 import com.example.buzzversion2.R;
 import com.example.buzzversion2.adapters.RecentConversationsAdapter;
 import com.example.buzzversion2.databinding.ActivityMainBinding;
-import com.example.buzzversion2.firebase.ServerTimestamp;
 import com.example.buzzversion2.listeners.ConversationListener;
 import com.example.buzzversion2.models.ChatMessage;
 import com.example.buzzversion2.models.User;
@@ -25,6 +24,7 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.ServerTimestamp;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.ArrayList;
@@ -120,7 +120,10 @@ public class MainActivity extends BaseActivity implements ConversationListener {
                         chatMessage.conversationId = documentChange.getDocument().getString(Constants.KEY_SENDER_ID);
                     }
                     chatMessage.message = documentChange.getDocument().getString(Constants.KEY_LAST_MESSAGE);
-                    chatMessage.dateObject = documentChange.getDocument().getDate(Constants.KEY_TIMESTAMP);
+                    Date date = (documentChange.getDocument().getDate(Constants.KEY_TIMESTAMP) != null)
+                            ? documentChange.getDocument().getDate(Constants.KEY_TIMESTAMP)
+                            : new Date();
+                    chatMessage.dateObject = date;
                     conversations.add(chatMessage);
                 } else if (documentChange.getType() == DocumentChange.Type.MODIFIED) {
                     for (int i = 0; i < conversations.size(); i++) {
@@ -128,17 +131,22 @@ public class MainActivity extends BaseActivity implements ConversationListener {
                         String receiverId = documentChange.getDocument().getString(Constants.KEY_RECEIVER_ID);
                         if (conversations.get(i).senderId.equals(senderId) && conversations.get(i).receiverId.equals(receiverId)) {
                             conversations.get(i).message = documentChange.getDocument().getString(Constants.KEY_LAST_MESSAGE);
-                            conversations.get(i).dateObject = documentChange.getDocument().getDate(Constants.KEY_TIMESTAMP);
+                            Date date = (documentChange.getDocument().getDate(Constants.KEY_TIMESTAMP) != null)
+                                    ? documentChange.getDocument().getDate(Constants.KEY_TIMESTAMP)
+                                    : new Date();
+                            conversations.get(i).dateObject = date;
                             break;
                         }
                     }
                 }
             }
-            Collections.sort(conversations, (obj1, obj2) -> obj2.dateObject.compareTo(obj1.dateObject));
-            recentConversationsAdapter.notifyDataSetChanged();
-            binding.conversationRecyclerView.smoothScrollToPosition(0);
             binding.conversationRecyclerView.setVisibility(View.VISIBLE);
             binding.progressBar.setVisibility(View.GONE);
+            if (conversations.size() > 0) {
+                Collections.sort(conversations, (obj1, obj2) -> obj2.dateObject.compareTo(obj1.dateObject));
+                recentConversationsAdapter.notifyDataSetChanged();
+                binding.conversationRecyclerView.smoothScrollToPosition(0);
+            }
         }
     };
 
@@ -162,6 +170,9 @@ public class MainActivity extends BaseActivity implements ConversationListener {
         FirebaseFirestore database = FirebaseFirestore.getInstance();
         DocumentReference documentReference = database.collection(Constants.KEY_COLLECTION_USER)
                 .document(preferenceManager.getString(Constants.KEY_USER_ID));
+
+        documentReference.update(Constants.KEY_AVAILABILITY, 0);
+
         HashMap<String, Object> updates = new HashMap<>();
         updates.put(Constants.KEY_FCM_TOKEN, FieldValue.delete());
         documentReference.update(updates)

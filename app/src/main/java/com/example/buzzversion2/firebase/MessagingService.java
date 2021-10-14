@@ -64,11 +64,6 @@ public class MessagingService extends FirebaseMessagingService {
         builder.setContentIntent(pendingIntent);
         builder.setAutoCancel(true);
 
-        Uri sound = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.bark);
-        long[] vibrate = { 0, 100, 200, 300 };
-        builder.setVibrate(vibrate);
-        builder.setSound(sound);
-
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.O) {
             CharSequence channelName = "Chat Message";
             String channelDescription = "This notification channel is used for chat message notifications";
