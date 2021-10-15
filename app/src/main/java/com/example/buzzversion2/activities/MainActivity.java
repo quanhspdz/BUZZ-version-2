@@ -56,7 +56,7 @@ public class MainActivity extends BaseActivity implements ConversationListener {
 
     private void init() {
         conversations = new ArrayList<>();
-        recentConversationsAdapter = new RecentConversationsAdapter(conversations, this);
+        recentConversationsAdapter = new RecentConversationsAdapter(conversations, this, getApplicationContext());
         binding.conversationRecyclerView.setAdapter(recentConversationsAdapter);
         database = FirebaseFirestore.getInstance();
     }
@@ -118,6 +118,9 @@ public class MainActivity extends BaseActivity implements ConversationListener {
                     ChatMessage chatMessage = new ChatMessage();
                     chatMessage.senderId = senderId;
                     chatMessage.receiverId = receiveId;
+                    chatMessage.whoSend = documentChange.getDocument().getString(Constants.KEY_WHO_SEND);
+                    chatMessage.conversionId = documentChange.getDocument().getId();
+                    chatMessage.seenStatus = documentChange.getDocument().getLong(Constants.KEY_SEEN_STATUS);
                     if (preferenceManager.getString(Constants.KEY_USER_ID).equals(senderId)) {
                         chatMessage.conversationImage = documentChange.getDocument().getString(Constants.KEY_RECEIVER_IMAGE);
                         chatMessage.conversationName = documentChange.getDocument().getString(Constants.KEY_RECEIVER_NAME);
@@ -142,7 +145,10 @@ public class MainActivity extends BaseActivity implements ConversationListener {
                             Date date = (documentChange.getDocument().getDate(Constants.KEY_TIMESTAMP) != null)
                                     ? documentChange.getDocument().getDate(Constants.KEY_TIMESTAMP)
                                     : new Date();
+                            conversations.get(i).whoSend = documentChange.getDocument().getString(Constants.KEY_WHO_SEND);
                             conversations.get(i).dateObject = date;
+                            conversations.get(i).conversionId = documentChange.getDocument().getId();
+                            conversations.get(i).seenStatus = documentChange.getDocument().getLong(Constants.KEY_SEEN_STATUS);
                             break;
                         }
                     }

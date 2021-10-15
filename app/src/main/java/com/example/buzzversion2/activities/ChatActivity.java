@@ -68,6 +68,7 @@ public class ChatActivity extends BaseActivity {
     private FirebaseFirestore database;
     private String conversationId = null;
     private Boolean isReceiverAvailable = false;
+    private String lastMessage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,7 +80,6 @@ public class ChatActivity extends BaseActivity {
         init();
         listenerMessages();
         listenAvailabilityOfReceiver();
-
     }
     private void listenAvailabilityOfReceiver() {
         database.collection(Constants.KEY_COLLECTION_USER)
@@ -136,6 +136,7 @@ public class ChatActivity extends BaseActivity {
                     chatMessage.senderId = documentChange.getDocument().getString(Constants.KEY_SENDER_ID);
                     chatMessage.receiverId = documentChange.getDocument().getString(Constants.KEY_RECEIVER_ID);
                     chatMessage.message = documentChange.getDocument().getString(Constants.KEY_MESSAGE);
+                    chatMessage.whoSend = documentChange.getDocument().getString(Constants.KEY_SENDER_ID);
                     Date date = new Date();
                     chatMessage.isServerTime = false;
                     if (documentChange.getDocument().getDate(Constants.KEY_TIMESTAMP) != null) {
@@ -179,9 +180,10 @@ public class ChatActivity extends BaseActivity {
         message.put(Constants.KEY_RECEIVER_ID, receivedUser.id);
         message.put(Constants.KEY_MESSAGE, binding.inputMessage.getText().toString());
         message.put(Constants.KEY_TIMESTAMP, FieldValue.serverTimestamp());
+        message.put(Constants.KEY_WHO_SEND, preferenceManager.getString(Constants.KEY_USER_ID));
         database.collection(Constants.KEY_COLLECTION_CHAT).add(message);
         if (conversationId != null) {
-            updateConversation(binding.inputMessage.getText().toString());
+            updateConversation(binding.inputMessage.getText().toString(), 0);
         } else {
             HashMap<String, Object> conversation = new HashMap<>();
             conversation.put(Constants.KEY_SENDER_ID, preferenceManager.getString(Constants.KEY_USER_ID));
@@ -192,6 +194,9 @@ public class ChatActivity extends BaseActivity {
             conversation.put(Constants.KEY_RECEIVER_IMAGE, receivedUser.image);
             conversation.put(Constants.KEY_LAST_MESSAGE, binding.inputMessage.getText().toString());
             conversation.put((Constants.KEY_TIMESTAMP), FieldValue.serverTimestamp());
+            conversation.put(Constants.KEY_SEEN_STATUS, 0);
+            conversation.put(Constants.KEY_WHO_SEND, preferenceManager.getString(Constants.KEY_USER_ID));
+            conversation.put(Constants.KEY_CONVERSATION_ID, conversationId);
 
             addConversation(conversation);
         }
@@ -305,6 +310,19 @@ public class ChatActivity extends BaseActivity {
                 startActivity(intent);
             }
         });
+        binding.inputMessage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!chatMessages.get(chatMessages.size() - 1).whoSend.equals(preferenceManager.getString(Constants.KEY_USER_ID))) {
+                    FirebaseFirestore database = FirebaseFirestore.getInstance();
+                    DocumentReference documentReference =
+                            database.collection(Constants.KEY_COLLECTION_CONVERSATIONS).document(conversationId);
+                    documentReference.update(
+                            Constants.KEY_SEEN_STATUS, 1
+                    );
+                }
+            }
+        });
     }
 
     private String getReadableTime(Date date) {
@@ -349,16 +367,23 @@ public class ChatActivity extends BaseActivity {
                 .add(conversation)
                 .addOnSuccessListener(documentReference -> {
                     conversationId = documentReference.getId();
+                    documentReference =
+                            database.collection(Constants.KEY_COLLECTION_CONVERSATIONS).document(conversationId);
+                    documentReference.update(
+                            Constants.KEY_CONVERSATION_ID, conversationId
+                    );
                 });
     }
 
-    private void updateConversation(String message) {
-        Timestamp timestamp = Timestamp.now();
+    private void updateConversation(String message, int seenStatus) {
         DocumentReference documentReference =
                 database.collection(Constants.KEY_COLLECTION_CONVERSATIONS).document(conversationId);
         documentReference.update(
                 Constants.KEY_LAST_MESSAGE, message,
-                Constants.KEY_TIMESTAMP, FieldValue.serverTimestamp()
+                Constants.KEY_TIMESTAMP, FieldValue.serverTimestamp(),
+                Constants.KEY_SEEN_STATUS, seenStatus,
+                Constants.KEY_WHO_SEND, preferenceManager.getString(Constants.KEY_USER_ID),
+                Constants.KEY_CONVERSATION_ID, conversationId
         );
     }
 

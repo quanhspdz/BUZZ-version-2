@@ -8,6 +8,7 @@ public class ChatMessage {
     public String senderId, receiverId, message, dateTime;
     public Date dateObject;
     public Timestamp timestamp;
-    public String conversationId, conversationName, conversationImage;
+    public String conversationId, conversationName, conversationImage, whoSend, conversionId;
     public Boolean isServerTime;
+    public Long seenStatus;
 }
