@@ -7,7 +7,7 @@
     android:animateLayoutChanges="true"
     android:background="@color/primary"
     android:windowSoftInputMode="adjustPan"
-    tools:context=".activities.ChatActivity">
+    tools:context="com.quanhspdz.buzzversion2.activities.ChatActivity">
 
     <View
         android:id="@+id/viewBackground"

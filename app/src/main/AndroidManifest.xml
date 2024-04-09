@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.example.buzzversion2">
+    package="com.quanhspdz.buzzversion2">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -13,21 +13,21 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BUZZVersion2">
         <activity
-            android:name=".activities.UserInfoActivity"
+            android:name="com.quanhspdz.buzzversion2.activities.UserInfoActivity"
             android:exported="true" />
         <activity
-            android:name=".activities.ChatActivity"
+            android:name="com.quanhspdz.buzzversion2.activities.ChatActivity"
             android:exported="true"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".activities.UsersActivity"
+            android:name="com.quanhspdz.buzzversion2.activities.UsersActivity"
             android:exported="true" />
         <activity
-            android:name=".activities.SignUpActivity"
+            android:name="com.quanhspdz.buzzversion2.activities.SignUpActivity"
             android:exported="true"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".activities.SignInActivity"
+            android:name="com.quanhspdz.buzzversion2.activities.SignInActivity"
             android:exported="true"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
@@ -37,11 +37,11 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activities.MainActivity"
+            android:name="com.quanhspdz.buzzversion2.activities.MainActivity"
             android:exported="true" />
 
         <service
-            android:name=".firebase.MessagingService"
+            android:name="com.quanhspdz.buzzversion2.firebase.MessagingService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />

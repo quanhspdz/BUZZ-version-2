@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/primary"
     android:animateLayoutChanges="true"
-    tools:context=".activities.UserInfoActivity">
+    tools:context="com.quanhspdz.buzzversion2.activities.UserInfoActivity">
 
     <TextView
         android:id="@+id/textName"
